@@ -1,7 +1,10 @@
 import express from 'express'
 
 /* Para levantar servidor - levantar la aplicacion - crea instancia*/
-const app = (express.json()); /*middleware*/
+const app = express();
+
+/*middleware*/
+app.use(express.json()); 
 
 const puerto = 8080;
 
@@ -37,7 +40,7 @@ app.post('/api/users' ,(req, res) => {
     }
     const nuevoUsuario ={
         id: users.length + 1,
-        name
+        nombre
     };
     users.push(nuevoUsuario);
     res.status(201).json(nuevoUsuario);
