@@ -1,7 +1,7 @@
 import express from 'express'
 
 /* Para levantar servidor - levantar la aplicacion - crea instancia*/
-const app = express();
+const app = (express.json()); /*middleware*/
 
 const puerto = 8080;
 
@@ -28,6 +28,22 @@ app.get('/api/users/:id', (req, res) => {
     res.status(200).json(user);
 })
 
+app.post('/api/users' ,(req, res) => { 
+    const{nombre} = req.body;
+    if (!nombre){
+        return res.status(404).json(
+            {mensaje: 'Nombre requerido'}
+        );
+    }
+    const nuevoUsuario ={
+        id: users.length + 1,
+        name
+    };
+    users.push(nuevoUsuario);
+    res.status(201).json(nuevoUsuario);
+})
+
+/*puerto escuchado*/
 app.listen(puerto, () => {
     console.log(`Servidor escuchando en el puerto ${puerto}`)
 })
