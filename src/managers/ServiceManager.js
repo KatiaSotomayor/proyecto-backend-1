@@ -9,7 +9,13 @@ export class ServiceManager {
     }
 
     getServices() {
-        return this.services;
+        ({ category, available } = {}) => {
+            return this.services.filter(service => {
+                if (category && service.category.toLowerCase() !== category.toLowerCase()) return false;
+                if (available !== undefined && String(service.available) !== available) return false;
+                return true;
+            });
+        }
     }
 
     getServiceById(id) {
