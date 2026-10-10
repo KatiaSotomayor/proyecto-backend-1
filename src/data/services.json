@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "name": "Dibujo estilo anime",
+    "description": "Dibujo personalizado estilo anime",
+    "duration": 40,
+    "price": 8000,
+    "category": "Anime",
+    "available": true
+  },
+  {
+    "id": 2,
+    "name": "Illustracion cartoon",
+    "description": "Illustracion digital estilo cartoon personalizado",
+    "duration": 30,
+    "price": 12000,
+    "category": "Cartoon",
+    "available": true
+  },
+  {
+    "id": 3,
+    "name": "Pintura acrilica",
+    "description": "Pintura acrilica a pedido y personalizable",
+    "duration": 45,
+    "price": 40000,
+    "category": "Pintura",
+    "available": false
+  }
+]
