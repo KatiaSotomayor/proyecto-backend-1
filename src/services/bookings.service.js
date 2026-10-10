@@ -45,13 +45,13 @@ export class BookingsService {
         const servicio = await this.servicesService.getServiceById(serviceId);
         if (!servicio) throw createError(404, 'Servicio no encontrado');
 
-        const alreadyAdded = booking.services.some(item => item.service === serviceId);
+        const alreadyAdded = booking.services.some(item => String(item.service) === serviceId);
 
         const updatedServices = alreadyAdded
             ? booking.services.map(item =>
-                item.service === serviceId ? { ...item, quantity: item.quantity + 1 } : item
-              )
-            : [...booking.services, { service: serviceId, quantity: 1 }];
+                String(item.service) === serviceId ? { ...item, quantity: item.quantity + 1 } : item
+            )
+            : [...booking.services, { service: servicio._id, quantity: 1 }];
 
         return this.repository.update(bookingId, { services: updatedServices });
     }

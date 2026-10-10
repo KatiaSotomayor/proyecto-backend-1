@@ -35,8 +35,7 @@ export class ServicesService {
     }
 
     async updateService(id, updatedData) {
-        /*no se modifica el id*/
-        const { id: _ignoredId, ...safeData } = updatedData;
+        const { id: _ignoredId, _id: _ignoredMongoId, ...safeData } = updatedData;
         return this.repository.update(id, safeData);
     }
 

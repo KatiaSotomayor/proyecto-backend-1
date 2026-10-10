@@ -9,7 +9,7 @@ export const getServices = async (req, res) => {
 };
 
 export const getServiceById = async (req, res) => {
-    const servicio = await servicesService.getServiceById(Number(req.params.sid));
+    const servicio = await servicesService.getServiceById(req.params.sid);
 
     if (!servicio) {
         return res.status(404).json({ status: 'error', message: 'Servicio no encontrado' });
@@ -27,7 +27,7 @@ export const createService = async (req, res) => {
 };
 
 export const updateService = async (req, res) => {
-    const actualizado = await servicesService.updateService(Number(req.params.sid), req.body ?? {});
+    const actualizado = await servicesService.updateService(req.params.sid, req.body ?? {});
 
     if (!actualizado) {
         return res.status(404).json({ status: 'error', message: 'Servicio no encontrado' });
@@ -36,7 +36,7 @@ export const updateService = async (req, res) => {
 };
 
 export const deleteService = async (req, res) => {
-    const borrado = await servicesService.deleteService(Number(req.params.sid));
+    const borrado = await servicesService.deleteService(req.params.sid);
 
     if (!borrado) {
         return res.status(404).json({ status: 'error', message: 'Servicio no encontrado' });
