@@ -41,7 +41,7 @@ export class BookingManager {
             throw crearError(400, `Faltan campos OBLIGATORIOS: ${missing.join(', ')}`);
         }
 
-        const { clientName, clientEmail, date, time, status = 'Pendiente' } = bookingData;
+        const { clientName, clientEmail, date, time, status = 'pending' } = bookingData;
 
         if (!VALIDAR_ESTADO.includes(status)) {
             throw crearError(400, `Status inválido. Valores permitidos: ${VALIDAR_ESTADO.join(', ')}`);
