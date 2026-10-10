@@ -6,7 +6,7 @@ const app = express();
 /*middleware*/
 app.use(express.json()); 
 
-const puerto = 8080;
+const puerto = PORT;
 
 let users = [
     {id: 1, nombre: 'karla'},
