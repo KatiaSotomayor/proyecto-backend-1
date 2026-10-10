@@ -1,4 +1,5 @@
 import express from 'express'
+import { envConfig } from './config/env.config.js'
 
 /* Para levantar servidor - levantar la aplicacion - crea instancia*/
 const app = express();
@@ -6,7 +7,7 @@ const app = express();
 /*middleware*/
 app.use(express.json()); 
 
-const puerto = PORT;
+const puerto = envConfig.port;
 
 let users = [
     {id: 1, nombre: 'karla'},
