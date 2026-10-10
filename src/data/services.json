@@ -8,7 +8,6 @@
     "category": "Estudio de Música",
     "available": true
   },
-
   {
     "id": 2,
     "name": "Estudio de Música pequeño",
@@ -18,7 +17,6 @@
     "category": "Estudio de Música",
     "available": true
   },
-
   {
     "id": 3,
     "name": "Karaoke pequeño",
@@ -28,14 +26,22 @@
     "category": "Karaoke",
     "available": true
   },
-
-    {
+  {
     "id": 4,
     "name": "Karaoke grande",
     "description": "Espacio para pasar canto recreativo para grupos grandes, se paga por persona.",
     "duration": 60,
     "price": 10000,
     "category": "Karaoke",
+    "available": true
+  },
+  {
+    "id": 5,
+    "name": "Hall Musical para 150 personas",
+    "description": "Espacio para muestras musicales. Maximo de 150 personas, incluye parlantes, escenario, set de sonido y luces.",
+    "duration": 60,
+    "price": 100000,
+    "category": "Hall",
     "available": true
   }
 ]
