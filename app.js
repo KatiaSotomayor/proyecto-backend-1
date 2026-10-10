@@ -39,7 +39,7 @@ app.get('/api/users/:id', (req, res) => {
 app.post('/api/users' ,(req, res) => { 
     const{nombre} = req.body;
     if (!nombre){
-        return res.status(404).json(
+        return res.status(400).json(
             {mensaje: 'Nombre requerido'}
         );
     }
