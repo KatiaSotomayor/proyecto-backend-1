@@ -1,0 +1,41 @@
+<h2>{{title}}</h2>
+
+<section class="card">
+    <h3>Reserva de {{booking.clientName}}</h3>
+    <ul>
+        <li>Email: {{booking.clientEmail}}</li>
+        <li>Fecha: {{formatDate booking.date}}</li>
+        <li>Hora: {{booking.time}}</li>
+        <li>Estado: {{booking.status}}</li>
+    </ul>
+</section>
+
+<h3>Servicios asociados</h3>
+{{#if booking.services.length}}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Servicio</th>
+            <th>Categoría</th>
+            <th>Precio</th>
+            <th>Cantidad</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each booking.services}}
+        <tr>
+            {{#if service}}
+            <td>{{service.name}}</td>
+            <td>{{service.category}}</td>
+            <td>{{formatPrice service.price}}</td>
+            {{else}}
+            <td colspan="3">Servicio eliminado</td>
+            {{/if}}
+            <td>{{quantity}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+{{else}}
+<p class="empty">Esta reserva todavía no tiene servicios asociados.</p>
+{{/if}}

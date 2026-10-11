@@ -21,7 +21,7 @@ const startServer = async () => {
     });
 
     httpServer.listen(envConfig.port, () => {
-        console.log(`Servidor escuchando en el puerto ${envConfig.port}`);
+        console.log(`${envConfig.appName} escuchando en el puerto ${envConfig.port} (${envConfig.appEnv})`);
     });
 };
 

@@ -19,7 +19,8 @@
     Todavía no hay servicios cargados.
 </p>
 
+{{#if realtime}}
 <p id="connection-status" class="status">Conectando…</p>
-
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/socket.js"></script>
+{{/if}}

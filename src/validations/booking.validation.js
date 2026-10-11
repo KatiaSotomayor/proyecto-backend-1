@@ -22,3 +22,9 @@ export const addServiceToBookingSchema = z.object({
         .positive({ error: 'quantity debe ser mayor a 0' })
         .optional()
 });
+
+export const updateQuantitySchema = z.object({
+    quantity: z.number({ error: 'quantity es obligatorio y debe ser un número' })
+        .int({ error: 'quantity debe ser un número entero' })
+        .positive({ error: 'quantity debe ser mayor a 0' })
+});
