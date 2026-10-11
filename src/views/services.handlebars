@@ -1,0 +1,25 @@
+<h2>{{title}}</h2>
+
+<div id="services-list" class="grid">
+    {{#each services}}
+    <article class="card">
+        <h3>{{name}}</h3>
+        <p>{{description}}</p>
+        <ul>
+            <li>Duración: {{duration}} min</li>
+            <li>Precio: {{formatPrice price}}</li>
+            <li>Categoría: {{category}}</li>
+            <li>Disponible: {{#if available}}Sí{{else}}No{{/if}}</li>
+        </ul>
+    </article>
+    {{/each}}
+</div>
+
+<p id="empty-message" class="empty" {{#if services.length}}hidden{{/if}}>
+    Todavía no hay servicios cargados.
+</p>
+
+<p id="connection-status" class="status">Conectando…</p>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/socket.js"></script>

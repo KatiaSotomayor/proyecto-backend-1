@@ -2,10 +2,18 @@ import { ServicesService } from '../services/services.service.js';
 
 const servicesService = new ServicesService();
 
+const emitServicesUpdated = async req => {
+    const io = req.app.get('io');
+    if (!io) return;
+
+    const servicios = await servicesService.getServices();
+    io.emit('servicesUpdated', servicios);
+};
+
 export const getServices = async (req, res) => {
     const { category, available } = req.query;
-    const services = await servicesService.getServices({ category, available });
-    res.status(200).json({ status: 'success', payload: services });
+    const servicios = await servicesService.getServices({ category, available });
+    res.status(200).json({ status: 'success', payload: servicios });
 };
 
 export const getServiceById = async (req, res) => {
@@ -19,8 +27,9 @@ export const getServiceById = async (req, res) => {
 
 export const createService = async (req, res) => {
     try {
-        const nuevoServicio = await servicesService.createService(req.body ?? {});
-        res.status(201).json({ status: 'success', payload: nuevoServicio });
+        const newService = await servicesService.createService(req.body ?? {});
+        await emitServicesUpdated(req);
+        res.status(201).json({ status: 'success', payload: newService });
     } catch (error) {
         res.status(400).json({ status: 'error', message: error.message });
     }
@@ -32,6 +41,7 @@ export const updateService = async (req, res) => {
     if (!actualizado) {
         return res.status(404).json({ status: 'error', message: 'Servicio no encontrado' });
     }
+    await emitServicesUpdated(req);
     res.status(200).json({ status: 'success', payload: actualizado });
 };
 
@@ -41,5 +51,6 @@ export const deleteService = async (req, res) => {
     if (!borrado) {
         return res.status(404).json({ status: 'error', message: 'Servicio no encontrado' });
     }
+    await emitServicesUpdated(req);
     res.status(200).json({ status: 'success', payload: borrado });
 };

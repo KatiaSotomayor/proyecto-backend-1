@@ -1,0 +1,27 @@
+<h2>{{title}}</h2>
+
+<section>
+    <h3>Disponibles ({{availableServices.length}})</h3>
+    {{#if availableServices.length}}
+    <ul>
+        {{#each availableServices}}
+        <li>{{name}} · {{category}} · {{duration}} min · {{formatPrice price}}</li>
+        {{/each}}
+    </ul>
+    {{else}}
+    <p class="empty">No hay servicios disponibles.</p>
+    {{/if}}
+</section>
+
+<section>
+    <h3>No disponibles ({{unavailableServices.length}})</h3>
+    {{#if unavailableServices.length}}
+    <ul>
+        {{#each unavailableServices}}
+        <li>{{name}} · {{category}} · {{duration}} min · {{formatPrice price}}</li>
+        {{/each}}
+    </ul>
+    {{else}}
+    <p class="empty">Todos los servicios están disponibles.</p>
+    {{/if}}
+</section>
