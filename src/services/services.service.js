@@ -1,20 +1,66 @@
 import { ServicesRepository } from '../repositories/services.repository.js';
 
-const CAMPOS_REQUERIDOS = ['name', 'description', 'duration', 'price', 'category', 'available'];
+// Convierte los filtros que llegan de la URL (texto) en un filtro de MongoDB
+const buildFilter = ({ category, available } = {}) => {
+    const filtro = {};
+    if (category) filtro.category = category;
+    if (available !== undefined) filtro.available = available === 'true';
+    return filtro;
+};
 
 export class ServicesService {
     constructor(repository = new ServicesRepository()) {
         this.repository = repository;
     }
 
-    async getServices({ category, available } = {}) {
-        const servicios = await this.repository.getAll();
+    async getServices(filtros = {}) {
+        return this.repository.getAll(buildFilter(filtros));
+    }
 
-        return servicios.filter(service => {
-            if (category && service.category.toLowerCase() !== category.toLowerCase()) return false;
-            if (available !== undefined && String(service.available) !== available) return false;
-            return true;
-        });
+    async getPaginatedServices({ category, available, page = 1, limit = 10, sortBy, order = 'asc' } = {}) {
+        const filtro = buildFilter({ category, available });
+
+        const sort = sortBy
+            ? { [sortBy]: order === 'desc' ? -1 : 1, _id: 1 }
+            : { _id: 1 };
+
+        const skip = (page - 1) * limit;
+
+        const [servicios, total] = await Promise.all([
+            this.repository.getAll(filtro, { skip, limit, sort }),
+            this.repository.count(filtro)
+        ]);
+
+        const totalPages = Math.max(Math.ceil(total / limit), 1);
+        const hasPrevPage = page > 1;
+        const hasNextPage = page < totalPages;
+
+        const buildLink = targetPage => {
+            const params = new URLSearchParams();
+            if (category) params.set('category', category);
+            if (available !== undefined) params.set('available', available);
+            if (sortBy) {
+                params.set('sortBy', sortBy);
+                params.set('order', order);
+            }
+            params.set('limit', limit);
+            params.set('page', targetPage);
+            return `/api/services?${params.toString()}`;
+        };
+
+        return {
+            payload: servicios,
+            total,
+            page,
+            limit,
+            totalPages,
+            hasPrevPage,
+            hasNextPage,
+            prevPage: hasPrevPage ? page - 1 : null,
+            nextPage: hasNextPage ? page + 1 : null,
+            prevLink: hasPrevPage ? buildLink(page - 1) : null,
+            nextLink: hasNextPage ? buildLink(page + 1) : null
+        };
     }
 
     async getServiceById(id) {
@@ -22,16 +68,7 @@ export class ServicesService {
     }
 
     async createService(serviceData) {
-        const missing = CAMPOS_REQUERIDOS.filter(
-            field => serviceData[field] === undefined || serviceData[field] === null || serviceData[field] === ''
-        );
-
-        if (missing.length > 0) {
-            throw new Error(`Faltan campos OBLIGATORIOS: ${missing.join(', ')}`);
-        }
-
-        const { name, description, duration, price, category, available } = serviceData;
-        return this.repository.create({ name, description, duration, price, category, available });
+        return this.repository.create(serviceData);
     }
 
     async updateService(id, updatedData) {

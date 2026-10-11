@@ -30,9 +30,11 @@ export const getBookingById = async (req, res) => {
 
 export const addServiceToBooking = async (req, res) => {
     try {
+        const { quantity } = req.body ?? {};
         const booking = await bookingsService.addServiceToBooking(
             req.params.bid,
-            req.params.sid
+            req.params.sid,
+            quantity
         );
         res.status(200).json({ status: 'success', payload: booking });
     } catch (error) {

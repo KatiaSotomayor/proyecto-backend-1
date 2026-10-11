@@ -1,9 +1,6 @@
 import { BookingsRepository } from '../repositories/bookings.repository.js';
 import { ServicesService } from './services.service.js';
 
-const CAMPOS_REQUERIDOS = ['clientName', 'clientEmail', 'date', 'time'];
-const VALIDAR_ESTADO = ['pending', 'confirmed', 'cancelled'];
-
 const createError = (status, message) => {
     const error = new Error(message);
     error.status = status;
@@ -17,28 +14,14 @@ export class BookingsService {
     }
 
     async createBooking(bookingData) {
-        const missing = CAMPOS_REQUERIDOS.filter(
-            field => bookingData[field] === undefined || bookingData[field] === null || bookingData[field] === ''
-        );
-
-        if (missing.length > 0) {
-            throw createError(400, `Faltan campos OBLIGATORIOS: ${missing.join(', ')}`);
-        }
-
-        const { clientName, clientEmail, date, time, status = 'pending' } = bookingData;
-
-        if (!VALIDAR_ESTADO.includes(status)) {
-            throw createError(400, `Status inválido. Valores permitidos: ${VALIDAR_ESTADO.join(', ')}`);
-        }
-
-        return this.repository.create({ clientName, clientEmail, date, time, status, services: [] });
+        return this.repository.create({ ...bookingData, services: [] });
     }
 
     async getBookingById(id) {
-        return this.repository.getById(id);
+        return this.repository.getByIdPopulated(id);
     }
 
-    async addServiceToBooking(bookingId, serviceId) {
+    async addServiceToBooking(bookingId, serviceId, quantity = 1) {
         const booking = await this.repository.getById(bookingId);
         if (!booking) throw createError(404, 'Reserva no encontrada');
 
@@ -49,9 +32,9 @@ export class BookingsService {
 
         const updatedServices = alreadyAdded
             ? booking.services.map(item =>
-                String(item.service) === serviceId ? { ...item, quantity: item.quantity + 1 } : item
-            )
-            : [...booking.services, { service: servicio._id, quantity: 1 }];
+                String(item.service) === serviceId ? { ...item, quantity: item.quantity + quantity } : item
+              )
+            : [...booking.services, { service: servicio._id, quantity }];
 
         return this.repository.update(bookingId, { services: updatedServices });
     }

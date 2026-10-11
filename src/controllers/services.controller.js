@@ -11,9 +11,8 @@ const emitServicesUpdated = async req => {
 };
 
 export const getServices = async (req, res) => {
-    const { category, available } = req.query;
-    const servicios = await servicesService.getServices({ category, available });
-    res.status(200).json({ status: 'success', payload: servicios });
+    const result = await servicesService.getPaginatedServices(req.validatedQuery);
+    res.status(200).json({ status: 'success', ...result });
 };
 
 export const getServiceById = async (req, res) => {

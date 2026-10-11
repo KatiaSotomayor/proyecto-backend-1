@@ -5,8 +5,8 @@ export class ServicesRepository {
         this.dao = dao;
     }
 
-    getAll() {
-        return this.dao.getAll();
+    getAll(filter, options) {
+        return this.dao.getAll(filter, options);
     }
 
     getById(id) {
@@ -23,5 +23,9 @@ export class ServicesRepository {
 
     delete(id) {
         return this.dao.delete(id);
+    }
+
+    count(filter) {
+        return this.dao.count(filter);
     }
 }

@@ -18,4 +18,9 @@ export class BookingsDao {
         if (!isValidId(id)) return null;
         return BookingModel.findByIdAndUpdate(id, data, { new: true, runValidators: true }).lean();
     }
+    
+    async getByIdPopulated(id) {
+        if (!isValidId(id)) return null;
+        return BookingModel.findById(id).populate('services.service').lean();
+    }
 }

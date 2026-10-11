@@ -2,10 +2,11 @@ import mongoose from 'mongoose';
 import { ServiceModel } from './models/service.model.js';
 
 const isValidId = id => mongoose.isObjectIdOrHexString(id);
+const COLLATION = { locale: 'es', strength: 2 };
 
 export class ServicesDao {
-    async getAll() {
-        return ServiceModel.find().lean();
+    async getAll(filter = {}, { skip = 0, limit = 0, sort = {} } = {}) {
+        return ServiceModel.find(filter).collation(COLLATION).sort(sort).skip(skip).limit(limit).lean();
     }
 
     async getById(id) {
@@ -26,5 +27,9 @@ export class ServicesDao {
     async delete(id) {
         if (!isValidId(id)) return null;
         return ServiceModel.findByIdAndDelete(id).lean();
+    }
+
+    async count(filter = {}) {
+        return ServiceModel.countDocuments(filter).collation(COLLATION);
     }
 }

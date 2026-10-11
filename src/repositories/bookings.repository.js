@@ -16,4 +16,8 @@ export class BookingsRepository {
     update(id, data) {
         return this.dao.update(id, data);
     }
+
+    getByIdPopulated(id) {
+        return this.dao.getByIdPopulated(id);
+    }
 }
