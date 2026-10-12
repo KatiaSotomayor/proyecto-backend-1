@@ -1,26 +1,38 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{title}} · Turnos y Reservas</title>
+    <title>{{title}} | El Último Sono</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
 </head>
-
 <body>
-    <header class="topbar">
-        <h1>Sistema de Turnos y Reservas</h1>
-        <nav>
+    <header class="barra-superior">
+        <a class="marca" href="/services">
+            <span class="ecualizador" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+            <span class="marca-nombre">El Último Sono</span>
+            <span class="marca-lema">Estudios · Karaoke · Escenarios</span>
+        </a>
+        <nav class="menu">
             <a href="/services">Servicios</a>
-            <a href="/realtime-services">Tiempo real</a>
+            <a href="/realtime-services">En vivo</a>
             <a href="/availability">Disponibilidad</a>
+            <a href="/bookings">Reservas</a>
         </nav>
     </header>
 
-    <main class="container">
+    <main class="contenedor">
         {{{body}}}
     </main>
-</body>
 
+    <footer class="pie-pagina">
+        <p>El Último Sono | Proyecto final | Programación Backend I | CoderHouse</p>
+    </footer>
+
+    <div id="area-avisos" class="area-avisos" aria-live="polite"></div>
+    <script src="/js/manage.js"></script>
+</body>
 </html>

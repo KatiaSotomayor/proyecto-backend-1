@@ -1,0 +1,36 @@
+<section class="portada">
+    <p class="sobretitulo"><span class="punto-vivo"></span> En vivo</p>
+    <h1>{{title}}</h1>
+    <p class="texto-suave">Esta pantalla se actualiza sola cuando un servicio se crea, se modifica o se elimina (Socket.io).
+        Para verlo: dejá esta página abierta y creá, editá o eliminá un servicio desde <a href="/services">Servicios</a> en otra pestaña.</p>
+</section>
+
+<p id="estado-conexion" class="conexion">Conectando…</p>
+
+<div id="lista-servicios" class="grilla-servicios">
+    {{#each services}}
+    <article class="tarjeta-servicio {{#unless available}}no-disponible{{/unless}}">
+        <div class="onda" aria-hidden="true"></div>
+        <span class="etiqueta">{{category}}</span>
+        <h3>{{name}}</h3>
+        <p class="descripcion">{{description}}</p>
+        <div class="tarjeta-datos">
+            <span class="precio">${{price}}</span>
+            <span class="duracion">{{duration}} min</span>
+        </div>
+        <p class="disponibilidad {{#if available}}disponible{{else}}no-disponible{{/if}}">
+            {{#if available}}● Disponible{{else}}○ No disponible{{/if}}
+        </p>
+        <button class="boton boton-chico boton-secundario" type="button"
+            data-api="/api/services/{{_id}}" data-method="PUT"
+            data-body='{"available": {{#if available}}false{{else}}true{{/if}} }'>
+            {{#if available}}Marcar no disponible{{else}}Marcar disponible{{/if}}
+        </button>
+    </article>
+    {{else}}
+    <p class="vacio">No hay servicios cargados todavía.</p>
+    {{/each}}
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/socket.js"></script>

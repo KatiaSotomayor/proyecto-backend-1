@@ -1,24 +1,28 @@
-<h2>{{title}}</h2>
+<section class="portada">
+    <p class="sobretitulo"><a href="/bookings">← Todas las reservas</a></p>
+    <h1>Reserva de {{booking.clientName}}</h1>
+</section>
 
-<section class="card">
-    <h3>Reserva de {{booking.clientName}}</h3>
-    <ul>
-        <li>Email: {{booking.clientEmail}}</li>
-        <li>Fecha: {{formatDate booking.date}}</li>
-        <li>Hora: {{booking.time}}</li>
-        <li>Estado: {{booking.status}}</li>
+<section class="tarjeta">
+    <ul class="datos-reserva">
+        <li>Email: <strong>{{booking.clientEmail}}</strong></li>
+        <li>Fecha: <strong>{{booking.fecha}}</strong></li>
+        <li>Hora: <strong>{{booking.time}}</strong></li>
+        <li>Estado: <span class="estado-reserva estado-reserva-{{booking.status}}">{{booking.status}}</span></li>
     </ul>
 </section>
 
-<h3>Servicios asociados</h3>
+<h2>Servicios asociados</h2>
 {{#if booking.services.length}}
-<table class="table">
+<div class="tabla-contenedor">
+<table class="tabla">
     <thead>
         <tr>
             <th>Servicio</th>
             <th>Categoría</th>
             <th>Precio</th>
             <th>Cantidad</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -27,15 +31,61 @@
             {{#if service}}
             <td>{{service.name}}</td>
             <td>{{service.category}}</td>
-            <td>{{formatPrice service.price}}</td>
+            <td>${{service.price}}</td>
+            <td>
+                <form class="form-en-linea"
+                    data-api="/api/bookings/{{@root.booking._id}}/services/{{service._id}}" data-method="PUT"
+                    data-ok="Cantidad actualizada" data-reload>
+                    <input type="number" name="quantity" value="{{quantity}}" min="1" step="1" required>
+                    <button class="boton boton-chico boton-secundario" type="submit">Guardar</button>
+                </form>
+            </td>
+            <td>
+                <button class="boton boton-chico boton-peligro" type="button"
+                    data-api="/api/bookings/{{@root.booking._id}}/services/{{service._id}}" data-method="DELETE"
+                    data-ok="Servicio quitado de la reserva" data-reload>Quitar</button>
+            </td>
             {{else}}
             <td colspan="3">Servicio eliminado</td>
-            {{/if}}
             <td>{{quantity}}</td>
+            <td></td>
+            {{/if}}
         </tr>
         {{/each}}
     </tbody>
 </table>
+</div>
 {{else}}
-<p class="empty">Esta reserva todavía no tiene servicios asociados.</p>
+<p class="vacio">Esta reserva todavía no tiene servicios asociados.</p>
 {{/if}}
+
+<h2>Agregar un servicio</h2>
+{{#if availableServices.length}}
+<form class="form-en-linea tarjeta" data-api="/api/bookings/{{booking._id}}/services/:sid" data-method="POST"
+    data-ok="Servicio agregado a la reserva" data-reload>
+    <label>Servicio
+        <select name="sid" required>
+            {{#each availableServices}}
+            <option value="{{_id}}">{{name}} · ${{price}}</option>
+            {{/each}}
+        </select>
+    </label>
+    <label>Cantidad
+        <input type="number" name="quantity" value="1" min="1" step="1" required>
+    </label>
+    <button class="boton boton-primario" type="submit">Agregar</button>
+</form>
+{{else}}
+<p class="vacio">No hay servicios disponibles para agregar.</p>
+{{/if}}
+
+<div class="zona-peligro">
+    <button class="boton boton-peligro" type="button"
+        data-api="/api/bookings/{{booking._id}}/services" data-method="DELETE"
+        data-confirm="¿Vaciar todos los servicios de esta reserva?"
+        data-ok="Servicios quitados de la reserva" data-reload>Vaciar servicios</button>
+    <button class="boton boton-peligro" type="button"
+        data-api="/api/bookings/{{booking._id}}" data-method="DELETE"
+        data-confirm="¿Eliminar esta reserva? Esta acción no se puede deshacer."
+        data-ok="Reserva eliminada" data-redirect="/bookings">Eliminar reserva</button>
+</div>

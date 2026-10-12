@@ -1,6 +1,5 @@
 import { ServicesRepository } from '../repositories/services.repository.js';
 
-// Convierte los filtros que llegan de la URL (texto) en un filtro de MongoDB
 const buildFilter = ({ category, available } = {}) => {
     const filtro = {};
     if (category) filtro.category = category;

@@ -10,13 +10,13 @@ export const validateBody = schema => (req, res, next) => {
             errors: formatIssues(result.error.issues)
         });
     }
-    req.body = result.data; /*body validado y limpio*/
+    req.body = result.data;/*body validado y limpio*/
     next();
 };
 
 export const validateQuery = schema => (req, res, next) => {
-    const result = schema.safeParse(req.query);
-
+    const query = Object.fromEntries(Object.entries(req.query).filter(([, value]) => value !== ''));
+    const result = schema.safeParse(query);
     if (!result.success) {
         return res.status(400).json({
             status: 'error',

@@ -1,26 +1,143 @@
-<h2>{{title}}</h2>
+<section class="portada">
+    <p class="sobretitulo">Estudios · Karaoke · Escenarios</p>
+    <h1>{{title}}</h1>
+    <p class="texto-suave">Encontrá el espacio ideal para tu música.</p>
+</section>
 
-<div id="services-list" class="grid">
+<form class="filtros" method="get" action="/services">
+    <label>
+        Categoría
+        <input type="text" name="category" value="{{category}}" placeholder="Ej: Karaoke">
+    </label>
+    <label>
+        Disponibilidad
+        <select name="available">
+            {{#each availableOptions}}
+            <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+            {{/each}}
+        </select>
+    </label>
+    <label>
+        Ordenar por
+        <select name="sortBy">
+            {{#each sortOptions}}
+            <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+            {{/each}}
+        </select>
+    </label>
+    <label>
+        Sentido
+        <select name="order">
+            {{#each orderOptions}}
+            <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+            {{/each}}
+        </select>
+    </label>
+    <label>
+        Por página
+        <select name="limit">
+            {{#each limitOptions}}
+            <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+            {{/each}}
+        </select>
+    </label>
+    <div class="filtros-acciones">
+        <button class="boton boton-primario" type="submit">Buscar</button>
+        <a class="boton boton-secundario" href="/services">Limpiar</a>
+    </div>
+</form>
+
+<details class="panel">
+    <summary class="boton boton-primario">+ Nuevo servicio</summary>
+    <form class="form-columna" data-api="/api/services" data-method="POST" data-ok="Servicio creado" data-reload>
+        <label>Nombre
+            <input type="text" name="name" required maxlength="80">
+        </label>
+        <label>Descripción
+            <textarea name="description" rows="3" required></textarea>
+        </label>
+        <div class="fila">
+            <label>Duración (min)
+                <input type="number" name="duration" min="1" step="1" required>
+            </label>
+            <label>Precio (ARS)
+                <input type="number" name="price" min="0" step="1" required>
+            </label>
+        </div>
+        <label>Categoría
+            <input type="text" name="category" required>
+        </label>
+        <label class="casilla">
+            <input type="checkbox" name="available" checked> Disponible para reservar
+        </label>
+        <button class="boton boton-primario" type="submit">Crear servicio</button>
+    </form>
+</details>
+
+{{#if services.length}}
+<div class="grilla-servicios">
     {{#each services}}
-    <article class="card">
+    <article class="tarjeta-servicio {{#unless available}}no-disponible{{/unless}}">
+        <div class="onda" aria-hidden="true"></div>
+        <span class="etiqueta">{{category}}</span>
         <h3>{{name}}</h3>
-        <p>{{description}}</p>
-        <ul>
-            <li>Duración: {{duration}} min</li>
-            <li>Precio: {{formatPrice price}}</li>
-            <li>Categoría: {{category}}</li>
-            <li>Disponible: {{#if available}}Sí{{else}}No{{/if}}</li>
-        </ul>
+        <p class="descripcion">{{description}}</p>
+        <div class="tarjeta-datos">
+            <span class="precio">${{price}}</span>
+            <span class="duracion">{{duration}} min</span>
+        </div>
+        <p class="disponibilidad {{#if available}}disponible{{else}}no-disponible{{/if}}">
+            {{#if available}}● Disponible{{else}}○ No disponible{{/if}}
+        </p>
+
+        <details class="editar">
+            <summary class="boton boton-chico boton-secundario">Editar</summary>
+            <form class="form-columna" data-api="/api/services/{{_id}}" data-method="PUT" data-ok="Servicio actualizado" data-reload>
+                <label>Nombre
+                    <input type="text" name="name" value="{{name}}" required maxlength="80">
+                </label>
+                <label>Descripción
+                    <textarea name="description" rows="3" required>{{description}}</textarea>
+                </label>
+                <div class="fila">
+                    <label>Duración (min)
+                        <input type="number" name="duration" value="{{duration}}" min="1" step="1" required>
+                    </label>
+                    <label>Precio (ARS)
+                        <input type="number" name="price" value="{{price}}" min="0" step="1" required>
+                    </label>
+                </div>
+                <label>Categoría
+                    <input type="text" name="category" value="{{category}}" required>
+                </label>
+                <label class="casilla">
+                    <input type="checkbox" name="available" {{#if available}}checked{{/if}}> Disponible para reservar
+                </label>
+                <button class="boton boton-chico boton-primario" type="submit">Guardar cambios</button>
+            </form>
+        </details>
+
+        <button class="boton boton-chico boton-peligro" type="button"
+            data-api="/api/services/{{_id}}" data-method="DELETE"
+            data-confirm="¿Eliminar {{name}}? Esta acción no se puede deshacer."
+            data-ok="Servicio eliminado" data-reload>Eliminar</button>
     </article>
     {{/each}}
 </div>
-
-<p id="empty-message" class="empty" {{#if services.length}}hidden{{/if}}>
-    Todavía no hay servicios cargados.
-</p>
-
-{{#if realtime}}
-<p id="connection-status" class="status">Conectando…</p>
-<script src="/socket.io/socket.io.js"></script>
-<script src="/js/socket.js"></script>
+{{else}}
+<p class="vacio">No encontramos servicios con esos criterios.</p>
 {{/if}}
+
+<nav class="paginacion" aria-label="Paginación">
+    {{#if hasPrevPage}}
+    <a class="boton boton-secundario boton-chico" href="{{prevLink}}">← Anterior</a>
+    {{else}}
+    <span class="boton boton-secundario boton-chico deshabilitado">← Anterior</span>
+    {{/if}}
+    <span class="texto-suave">Página {{page}} de {{totalPages}} · {{total}} resultados</span>
+    {{#if hasNextPage}}
+    <a class="boton boton-secundario boton-chico" href="{{nextLink}}">Siguiente →</a>
+    {{else}}
+    <span class="boton boton-secundario boton-chico deshabilitado">Siguiente →</span>
+    {{/if}}
+</nav>

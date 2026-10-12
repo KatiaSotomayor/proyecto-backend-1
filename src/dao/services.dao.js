@@ -32,4 +32,8 @@ export class ServicesDao {
     async count(filter = {}) {
         return ServiceModel.countDocuments(filter).collation(COLLATION);
     }
+
+    async getCategories() {
+        return ServiceModel.distinct('category');
+    }
 }

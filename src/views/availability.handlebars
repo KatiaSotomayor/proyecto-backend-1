@@ -1,27 +1,39 @@
-<h2>{{title}}</h2>
+<section class="portada">
+    <p class="sobretitulo">Disponibilidad</p>
+    <h1>{{title}}</h1>
+    <p class="texto-suave">Qué se puede reservar hoy y qué está fuera de servicio.</p>
+</section>
 
 <section>
-    <h3>Disponibles ({{availableServices.length}})</h3>
+    <h2 class="titulo-seccion disponible">Disponibles ({{availableServices.length}})</h2>
     {{#if availableServices.length}}
-    <ul>
+    <ul class="lista">
         {{#each availableServices}}
-        <li>{{name}} · {{category}} · {{duration}} min · {{formatPrice price}}</li>
+        <li>
+            <strong>{{name}}</strong>
+            <span class="texto-suave">{{category}} · {{duration}} min</span>
+            <span class="precio">${{price}}</span>
+        </li>
         {{/each}}
     </ul>
     {{else}}
-    <p class="empty">No hay servicios disponibles.</p>
+    <p class="vacio">No hay servicios disponibles.</p>
     {{/if}}
 </section>
 
 <section>
-    <h3>No disponibles ({{unavailableServices.length}})</h3>
+    <h2 class="titulo-seccion no-disponible">No disponibles ({{unavailableServices.length}})</h2>
     {{#if unavailableServices.length}}
-    <ul>
+    <ul class="lista">
         {{#each unavailableServices}}
-        <li>{{name}} · {{category}} · {{duration}} min · {{formatPrice price}}</li>
+        <li class="no-disponible">
+            <strong>{{name}}</strong>
+            <span class="texto-suave">{{category}} · {{duration}} min</span>
+            <span class="precio">${{price}}</span>
+        </li>
         {{/each}}
     </ul>
     {{else}}
-    <p class="empty">Todos los servicios están disponibles.</p>
+    <p class="vacio">Todos los servicios están disponibles.</p>
     {{/if}}
 </section>

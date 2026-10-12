@@ -1,0 +1,66 @@
+<section class="portada">
+    <p class="sobretitulo">Turnos y reservas</p>
+    <h1>{{title}}</h1>
+    <p class="texto-suave">Creá una reserva y después asociale los servicios desde su detalle.</p>
+</section>
+
+<details class="panel">
+    <summary class="boton boton-primario">+ Nueva reserva</summary>
+    <form class="form-columna" data-api="/api/bookings" data-method="POST" data-ok="Reserva creada" data-reload>
+        <div class="fila">
+            <label>Nombre del cliente
+                <input type="text" name="clientName" required>
+            </label>
+            <label>Email
+                <input type="email" name="clientEmail" required>
+            </label>
+        </div>
+        <div class="fila">
+            <label>Fecha
+                <input type="date" name="date" required>
+            </label>
+            <label>Hora
+                <input type="time" name="time" required>
+            </label>
+        </div>
+        <label>Estado
+            <select name="status">
+                <option value="">Pendiente (por defecto)</option>
+                <option value="confirmed">confirmed</option>
+                <option value="cancelled">cancelled</option>
+            </select>
+        </label>
+        <button class="boton boton-primario" type="submit">Crear reserva</button>
+    </form>
+</details>
+
+{{#if bookings.length}}
+<div class="tabla-contenedor">
+<table class="tabla">
+    <thead>
+        <tr>
+            <th>Cliente</th>
+            <th>Email</th>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Estado</th>
+            <th>Servicios</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each bookings}}
+        <tr>
+            <td><a href="/bookings/{{_id}}">{{clientName}}</a></td>
+            <td>{{clientEmail}}</td>
+            <td>{{fecha}}</td>
+            <td>{{time}}</td>
+            <td><span class="estado-reserva estado-reserva-{{status}}">{{status}}</span></td>
+            <td>{{services.length}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+</div>
+{{else}}
+<p class="vacio">Todavía no hay reservas. Creá la primera con el botón de arriba.</p>
+{{/if}}
